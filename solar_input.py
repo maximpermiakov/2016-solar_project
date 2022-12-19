@@ -19,10 +19,14 @@ def read_space_objects_data_from_file(input_filename):
             if len(line.strip()) == 0 or line[0] == '#':
                 continue  # пустые строки и строки-комментарии пропускаем
             object_type = line.split()[0].lower()
-            if object_type == "star":  # FIXME: do the same for planet
+            if object_type == "star":
                 star = Star()
                 parse_star_parameters(line, star)
                 objects.append(star)
+            elif object_type == "planet":
+                planet = Planet()
+                parse_planet_parameters(line, planet)
+                objects.append(planet)
             else:
                 print("Unknown space object")
 
@@ -52,6 +56,7 @@ def parse_star_parameters(line, star):
     star.y = float(l[5])
     star.Vx = float(l[6])
     star.Vy = float(l[7])
+
 
 def parse_planet_parameters(line, planet):
     """Считывает данные о планете из строки.
@@ -92,8 +97,11 @@ def write_space_objects_data_to_file(output_filename, space_objects):
     """
     with open(output_filename, 'w') as out_file:
         for obj in space_objects:
-            print(out_file, "%s %d %s %f %f %f %f %f" % (obj.type, obj.R, obj.color, obj.m, obj.x, obj.y, obj.Vx, obj.Vy))
+            out_file.write(
+                "%s %d %s %f %f %f %f %f" % (obj.type, obj.R, obj.color, obj.m, obj.x, obj.y, obj.Vx, obj.Vy))
+            print("%s %d %s %f %f %f %f %f" % (obj.type, obj.R, obj.color, obj.m, obj.x, obj.y, obj.Vx, obj.Vy))
             out_file.write('\n')
+        out_file.close()
 
 # FIXME: хорошо бы ещё сделать функцию, сохранающую статистику в заданный файл...
 
